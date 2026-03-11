@@ -1,0 +1,76 @@
+{% extends 'biblioteca/base.html' %}s
+{% block content %}
+<div class="container mt-4">
+    <h2>Búsqueda avanzada de libros</h2>
+
+    <!-- Formulario de filtros -->
+    <form method="get" class="mb-3">
+        <div class="row">
+            <div class="col-md-4">
+                <input type="text" name="q" class="form-control" placeholder="Buscar..." value="{{ query }}">
+            </div>
+            <div class="col-md-3">
+                <select name="genero" class="form-select">
+                    <option value="">-- Género --</option>
+                    {% for g in generos %}
+                        <option value="{{ g.0 }}" {% if genero_seleccionado == g.0 %}selected{% endif %}>
+                            {{ g.1 }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select name="autor" class="form-select">
+                    <option value="">-- Autor --</option>
+                    {% for a in autores %}
+                        <option value="{{ a.id }}" {% if autor_seleccionado == a.id|stringformat:"s" %}selected{% endif %}>
+                            {{ a.nombre }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select name="disponible" class="form-select">
+                    <option value="">-- Disponibilidad --</option>
+                    <option value="true" {% if disponible_seleccionado == 'true' %}selected{% endif %}>Disponible</option>
+                    <option value="false" {% if disponible_seleccionado == 'false' %}selected{% endif %}>No disponible</option>
+                </select>
+            </div>
+        </div>
+        <div class="mt-3">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        </div>
+    </form>
+
+    <!-- Resultados -->
+    <h5>Total resultados: {{ total_resultados }}</h5>
+    {% if page_obj %}
+        <ul class="list-group">
+            {% for libro in page_obj %}
+                <li class="list-group-item">
+                    <strong>{{ libro.titulo }}</strong>  
+                    <br>Autor: {{ libro.autor.nombre }}  
+                    <br>Género: {{ libro.get_genero_display }}  
+                    <br>ISBN: {{ libro.isbn }}  
+                    <br>{% if libro.disponible %}<span class="text-success">Disponible</span>{% else %}<span class="text-danger">No disponible</span>{% endif %}
+                </li>
+            {% empty %}
+                <li class="list-group-item">No se encontraron resultados.</li>
+            {% endfor %}
+        </ul>
+
+        <!-- Paginación -->
+        <nav aria-label="Page navigation" class="mt-3">
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}&q={{ query }}&genero={{ genero_seleccionado }}&autor={{ autor_seleccionado }}&disponible={{ disponible_seleccionado }}">Anterior</a></li>
+                {% endif %}
+                <li class="page-item disabled"><span class="page-link">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span></li>
+                {% if page_obj.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}&q={{ query }}&genero={{ genero_seleccionado }}&autor={{ autor_seleccionado }}&disponible={{ disponible_seleccionado }}">Siguiente</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+</div>
+{% endblock %}

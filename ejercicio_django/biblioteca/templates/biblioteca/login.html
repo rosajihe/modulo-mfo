@@ -1,0 +1,25 @@
+<!-- biblioteca/templates/biblioteca/login.html --> 
+{% extends 'biblioteca/base.html' %} 
+{% block title %}Iniciar Sesión - BiblioTech{% endblock %} 
+
+{% block content %} 
+<div class="cont-form">
+<h2>Iniciar Sesión</h2> 
+<form method="post"> 
+{% csrf_token %} 
+<div> 
+<label>{{ form.username.label_tag }}</label> 
+{{ form.username }} 
+</div> 
+<div> 
+<label>{{ form.password.label_tag }}</label> 
+{{ form.password }} 
+</div>
+
+<button type="submit">Iniciar Sesión</button> 
+</form> 
+<p><a href="{% url 'biblioteca:registro' %}">¿No tienes cuenta? Regístrate aquí</a></p>
+</div> 
+{% endblock %}
+
+

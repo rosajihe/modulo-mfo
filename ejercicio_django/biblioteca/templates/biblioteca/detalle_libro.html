@@ -1,0 +1,21 @@
+{% extends 'biblioteca/base.html' %}
+
+{% block content %}
+<h2>{{ libro.titulo }}</h2>
+<p>Autor: {{ libro.autor.nombre }}</p>
+<p>Género: {{ libro.genero }}</p>
+
+{% if user.is_authenticated %}
+    {% if libro.disponible %}
+        <form method="post" action="{% url 'biblioteca:solicitar_prestamo' libro.id %}">
+            {% csrf_token %}
+            <button type="submit">Solicitar préstamo</button>
+        </form>
+    {% else %}
+        <p>Este libro no está disponible actualmente ❌</p>
+    {% endif %}
+{% else %}
+    <p>Debes iniciar sesión para solicitar un préstamo.</p>
+{% endif %}
+
+{% endblock %}

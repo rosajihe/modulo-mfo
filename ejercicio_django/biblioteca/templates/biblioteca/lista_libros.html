@@ -1,0 +1,19 @@
+{% extends 'biblioteca/base.html' %}
+
+{% block content %}
+<h2>Lista de Libros</h2>
+
+{% if libros %}
+    <ul>
+        {% for libro in libros %}
+            <li>
+                <a href="{% url 'biblioteca:detalle_libro' libro.id %}">
+                    {{ libro.titulo }} - {{ libro.autor.nombre }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No hay libros disponibles en este momento.</p>
+{% endif %}
+{% endblock %}

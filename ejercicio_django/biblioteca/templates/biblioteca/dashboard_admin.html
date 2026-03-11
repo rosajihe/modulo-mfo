@@ -1,0 +1,82 @@
+{% extends 'biblioteca/base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Dashboard Administrativo</h2>
+
+    <!-- Métricas del último mes -->
+    <div class="row mt-3">
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5>Nuevos Usuarios (últimos 30 días)</h5>
+                    <p class="fw-bold">{{ nuevos_usuarios }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5>Nuevos Libros (últimos 30 días)</h5>
+                    <p class="fw-bold">{{ nuevos_libros }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5>Préstamos realizados (últimos 30 días)</h5>
+                    <p class="fw-bold">{{ prestamos_mes }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alertas -->
+    <div class="mt-4">
+        <h4>Alertas</h4>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <strong>Préstamos por devolver hoy:</strong> {{ devolver_hoy.count }}
+            </li>
+            <li class="list-group-item">
+                <strong>Préstamos vencidos:</strong> {{ prestamos_vencidos.count }}
+            </li>
+        </ul>
+    </div>
+
+    <!-- Actividad reciente -->
+    <div class="mt-4">
+        <h4>Actividad reciente</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Usuario</th>
+                    <th>Libro</th>
+                    <th>Fecha préstamo</th>
+                    <th>Fecha devolución esperada</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for prestamo in actividad_reciente %}
+                <tr>
+                    <td>{{ prestamo.usuario.username }}</td>
+                    <td>{{ prestamo.libro.titulo }}</td>
+                    <td>{{ prestamo.fecha_prestamo }}</td>
+                    <td>{{ prestamo.fecha_devolucion_esperada }}</td>
+                    <td>{{ prestamo.estado }}</td>
+                    <td>
+                        <a href="{% url 'biblioteca:gestionar_prestamo' prestamo.id %}" class="btn btn-sm btn-primary">Gestionar</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6">No hay actividad reciente.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'biblioteca/base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Gestionar Préstamo</h2>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{{ prestamo.libro.titulo }}</h5>
+            <p><strong>Usuario:</strong> {{ prestamo.usuario.username }}</p>
+            <p><strong>Fecha préstamo:</strong> {{ prestamo.fecha_prestamo }}</p>
+            <p><strong>Fecha devolución esperada:</strong> {{ prestamo.fecha_devolucion_esperada }}</p>
+            <p><strong>Estado:</strong> {{ prestamo.estado }}</p>
+        </div>
+    </div>
+
+    <!-- Formulario de acciones -->
+    <form method="post" class="mt-3">
+        {% csrf_token %}
+        <button type="submit" name="accion" value="devolver" class="btn btn-success">
+            Devolver libro
+        </button>
+        <button type="submit" name="accion" value="renovar" class="btn btn-warning">
+            Renovar préstamo (+14 días)
+        </button>
+        <a href="{% url 'biblioteca:dashboard_admin' %}" class="btn btn-secondary">Volver al Dashboard</a>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "biblioteca/base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Recomendaciones de Libros</h2>
+
+    {% if tiene_historial %}
+        <p>Estas recomendaciones se basan en tu historial de préstamos y en los libros más populares de la biblioteca.</p>
+    {% else %}
+        <p>No tienes historial de préstamos, así que te mostramos las novedades más recientes.</p>
+    {% endif %}
+
+    <!-- Secciones de recomendaciones -->
+    {% for grupo in recomendaciones %}
+        <div class="mt-4">
+            <h4>{{ grupo.titulo }}</h4>
+            <ul class="list-group">
+                {% for libro in grupo.libros %}
+                    <li class="list-group-item">
+                        <strong>{{ libro.titulo }}</strong><br>
+                        Autor: {{ libro.autor.nombre }}<br>
+                        Género: {{ libro.get_genero_display }}<br>
+                        ISBN: {{ libro.isbn }}<br>
+                        {% if libro.disponible %}
+                            <span class="text-success">Disponible</span>
+                        {% else %}
+                            <span class="text-danger">No disponible</span>
+                        {% endif %}
+                    </li>
+                {% empty %}
+                    <li class="list-group-item">No hay libros disponibles en esta categoría.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

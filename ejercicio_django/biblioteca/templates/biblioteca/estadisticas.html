@@ -1,0 +1,93 @@
+{% extends "biblioteca/base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Estadísticas Generales de la Biblioteca</h2>
+
+    <!-- Resumen general -->
+    <div class="row mt-3">
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5>Total Libros</h5>
+                    <p class="fw-bold">{{ total_libros }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5>Total Autores</h5>
+                    <p class="fw-bold">{{ total_autores }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5>Total Usuarios</h5>
+                    <p class="fw-bold">{{ total_usuarios }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5>Libros Disponibles</h5>
+                    <p class="fw-bold">{{ libros_disponibles }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Estadísticas de préstamos -->
+    <div class="mt-4">
+        <h4>Préstamos</h4>
+        <ul>
+            <li>Activos: {{ prestamos_activos }}</li>
+            <li>Vencidos: {{ prestamos_vencidos }}</li>
+        </ul>
+    </div>
+
+    <!-- Libros más prestados -->
+    <div class="mt-4">
+        <h4>Libros más populares</h4>
+        <ul class="list-group">
+            {% for libro in libros_populares %}
+                <li class="list-group-item">
+                    {{ libro.titulo }} ({{ libro.num_prestamos }} préstamos)
+                </li>
+            {% empty %}
+                <li class="list-group-item">No hay datos disponibles.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Géneros más populares -->
+    <div class="mt-4">
+        <h4>Géneros más populares</h4>
+        <ul class="list-group">
+            {% for genero in generos_populares %}
+                <li class="list-group-item">
+                    {{ genero.genero }} ({{ genero.count }} libros)
+                </li>
+            {% empty %}
+                <li class="list-group-item">No hay datos disponibles.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Usuarios más activos -->
+    <div class="mt-4">
+        <h4>Usuarios más activos</h4>
+        <ul class="list-group">
+            {% for usuario in usuarios_activos %}
+                <li class="list-group-item">
+                    {{ usuario.username }} ({{ usuario.num_prestamos }} préstamos)
+                </li>
+            {% empty %}
+                <li class="list-group-item">No hay datos disponibles.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

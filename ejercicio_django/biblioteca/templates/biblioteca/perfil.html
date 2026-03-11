@@ -1,0 +1,29 @@
+{% extends 'biblioteca/base.html' %}
+
+{% block content %}
+<h2>Mi Perfil</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Actualizar perfil</button>
+</form>
+
+<hr>
+
+<h3>Mis últimos préstamos</h3>
+{% if prestamos %}
+    <ul>
+        {% for prestamo in prestamos %}
+            <li>
+                <strong>{{ prestamo.libro.titulo }}</strong>  
+                - {{ prestamo.libro.autor.nombre }}  
+                (Prestado el {{ prestamo.fecha_prestamo|date:"d/m/Y" }},  
+                devolución esperada: {{ prestamo.fecha_devolucion_esperada|date:"d/m/Y" }})
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No tienes préstamos activos.</p>
+{% endif %}
+{% endblock %}

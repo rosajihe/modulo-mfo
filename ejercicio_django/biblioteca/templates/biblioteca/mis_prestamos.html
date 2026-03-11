@@ -1,0 +1,32 @@
+{% extends 'biblioteca/base.html' %}
+
+{% block content %}
+<h2>Mis Préstamos</h2>
+
+{% if prestamos %}
+    <table border="1" cellpadding="8" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Autor</th>
+                <th>Fecha de préstamo</th>
+                <th>Fecha de devolución esperada</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for prestamo in prestamos %}
+            <tr>
+                <td>{{ prestamo.libro.titulo }}</td>
+                <td>{{ prestamo.libro.autor.nombre }}</td>
+                <td>{{ prestamo.fecha_prestamo|date:"d/m/Y" }}</td>
+                <td>{{ prestamo.fecha_devolucion_esperada|date:"d/m/Y" }}</td>
+                <td>{{ prestamo.estado }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No tienes préstamos registrados.</p>
+{% endif %}
+{% endblock %}
