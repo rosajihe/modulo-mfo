@@ -1,0 +1,18 @@
+{% extends 'productos/base.html' %}
+
+{% block content %}
+
+    <h1>Top 5 Productos Más Vendidos</h1>
+    <table>
+        <tr>
+            <th>Producto</th>
+            <th>Cantidad Vendida</th>
+        </tr>
+        {% for item in top_items %}
+        <tr>
+            <td>{{ item.producto__nombre }}</td>
+            <td>{{ item.total_vendido }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

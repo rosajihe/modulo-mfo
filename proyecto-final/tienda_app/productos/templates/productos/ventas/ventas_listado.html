@@ -1,0 +1,45 @@
+{% extends 'productos/base.html' %}
+
+{% block content %}
+<h1>Listado de Ventas</h1>
+
+<table style="width: 100%; border-collapse: collapse; text-align: left;">
+    <thead style="background-color: #f2f2f2;">
+        <tr>
+            <th>ID / Referencia</th>
+            <th>Fecha / Cliente</th>
+            <th>Productos (Detalle)</th>
+            <th style="text-align: right;">Total Venta</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for venta in ventas %}
+        <tr style="border-bottom: 1px solid #ddd;">
+            <td>
+                <strong>{{ venta.id }}</strong>
+            </td>
+            <td>
+                {{ venta }} </td>
+            <td>
+                <ul style="margin: 0; padding-left: 20px; font-size: 0.9em;">
+                    {% for detalle in venta.detalles.all %}
+                    <li>
+                        {{ detalle.producto.nombre }}
+                        (x{{ detalle.cantidad }})
+                        <strong>${{ detalle.subtotal }}</strong>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </td>
+            <td style="padding: 10px; text-align: right; vertical-align: top; font-weight: bold;">
+                ${{ venta.total }}
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4" style="text-align: center; padding: 20px;">No hay ventas registradas.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

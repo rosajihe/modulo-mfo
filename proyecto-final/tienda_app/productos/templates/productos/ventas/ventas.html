@@ -1,0 +1,94 @@
+{% extends 'productos/base.html' %}
+
+{% block content %}
+<h1>Nueva Venta</h1>
+<form method="post" class="form-venta">
+    {% csrf_token %}
+    {{ venta_form.as_p }}
+    {{ formset.management_form }}
+    <table>
+        <tbody id="formset-body">
+            {% for form in formset %}
+            <tr class="fila-formset">
+                <td>{{ form.id }}{{ form.producto }}</td>
+                <td>{{ form.cantidad }}</td>
+                <td>{{ form.precio_unitario }}</td>
+                <td>{% if form.can_delete %}{{ form.DELETE }}{% endif %}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="2">Total:</td>
+                <td id="total-general">0.00</td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+    <button type="submit" class="btn-guardar">Guardar Venta</button>
+</form>
+{{ productos_json|json_script:"datos-productos" }}
+<script>
+    // 1. Cargar precios (asegúrate de que el ID coincida con json_script)
+    const datosElem = document.getElementById('datos-productos');
+    const preciosProductos = datosElem ? JSON.parse(datosElem.textContent) : {};
+
+    function calcularTotalVenta() {
+        let sumaTotal = 0;
+        // Buscamos todas las filas que tengan la clase que pusimos arriba
+        const filas = document.querySelectorAll('.fila-formset');
+
+        filas.forEach(fila => {
+            // Buscamos los inputs por su atributo 'name' parcial (lo que genera Django)
+            const inputCant = fila.querySelector('input[name$="-cantidad"]');
+            const inputPrec = fila.querySelector('input[name$="-precio_unitario"]');
+            const checkDelete = fila.querySelector('input[name$="-DELETE"]');
+
+            // Solo calculamos si la fila NO está marcada para borrar
+            if (!checkDelete || !checkDelete.checked) {
+                const cant = parseFloat(inputCant?.value) || 0;
+                const prec = parseFloat(inputPrec?.value) || 0;
+                sumaTotal += (cant * prec);
+            }
+        });
+
+        // Actualizar el texto del total
+        const displayTotal = document.getElementById('total-general');
+        if (displayTotal) {
+            displayTotal.innerText = sumaTotal.toFixed(2);
+        }
+    }
+
+    // Escuchar cambios en TODO el documento (Event Delegation)
+    document.addEventListener('input', function(e) {
+        const nombreCampo = e.target.name || "";
+
+        // Si cambia el producto:
+        if (nombreCampo.includes('-producto')) {
+            const fila = e.target.closest('tr');
+            const inputPrecio = fila.querySelector('input[name$="-precio_unitario"]');
+            
+            const precioSugerido = preciosProductos[e.target.value] || 0;
+            if (inputPrecio) {
+                inputPrecio.value = precioSugerido;
+            }
+            calcularTotalVenta();
+        }
+
+        // Si cambia cantidad o precio manualmente:
+        if (nombreCampo.includes('-cantidad') || nombreCampo.includes('-precio_unitario')) {
+            calcularTotalVenta();
+        }
+    });
+
+    // Escuchar el click en el checkbox de eliminar
+    document.addEventListener('change', function(e) {
+        if (e.target.name && e.target.name.includes('-DELETE')) {
+            calcularTotalVenta();
+        }
+    });
+
+    // Calcular al iniciar por si hay datos cargados
+    window.onload = calcularTotalVenta;
+</script>
+{% endblock %}

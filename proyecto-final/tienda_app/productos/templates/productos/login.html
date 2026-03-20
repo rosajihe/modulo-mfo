@@ -1,0 +1,26 @@
+{% extends 'productos/base.html' %} 
+{% block title %}Iniciar Sesión - {% endblock %} 
+
+{% block content %} 
+<div class="cont-form">
+<h2>Iniciar Sesión</h2> 
+<form method="post"> 
+{% csrf_token %} 
+<div> 
+<label>{{ form.username.label_tag }}</label> 
+{{ form.username }} 
+</div> 
+<div> 
+<label>{{ form.password.label_tag }}</label> 
+{{ form.password }} 
+</div>
+<div>
+<button type="submit" class="btn-login">Iniciar Sesión</button>
+</div> 
+</form> 
+<p><a href="{% url 'productos:registro' %}">¿No tienes cuenta? Regístrate aquí</a></p>
+</div> 
+{% endblock %}
+
+
+

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Tienda App - Inicio</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        h1 { color: #2c3e50; }
+        ul { list-style-type: none; padding: 0; }
+        li { margin: 10px 0; }
+        a { text-decoration: none; color: #2980b9; font-weight: bold; }
+        a:hover { color: #e74c3c; }
+    </style>
+</head>
+<body>
+    <h1>Bienvenida a la Tienda App 🚀</h1>
+    <p>Hola {{ request.user.username }}, ya puedes comprar productos.</p>
+    <a href="{% url 'logout' %}">Cerrar sesión</a>
+    <p>Selecciona una opción:</p>
+    <ul>
+        <li><a href="{% url 'productos:productos_listado' %}">📦 Productos</a></li>
+        <li><a href="{% url 'productos:ventas_crear' %}">🛒 Crear Venta</a></li>
+        <li><a href="{% url 'productos:reporte_top_items' %}">📊 Reportes</a></li>
+    </ul>
+</body>
+</html>
